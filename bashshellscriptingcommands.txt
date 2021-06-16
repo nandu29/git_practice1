@@ -1,0 +1,85 @@
+BASH:
+#!/bin/bash should be there in every bash script indicating it can run on BASH terminal
+Equal: -eq
+Not equal: -ne
+Less than or equal: -le
+Less than: -lt
+Greater than or equal: -ge
+Greater than: -gt
+Is null: -z
+Equal: ==
+Not equal: !=
+IF ELSE:
+if [ $index -lt 5 ]
+then
+  echo $index
+else
+  echo 5
+fi
+
+WHILE:
+while [ $greeting_occasion -lt 3 ]
+do 
+  if [ $greeting_occasion -lt 1 ]
+    then
+      echo $first_greeting
+  else
+    echo $later_greeting
+  fi
+  greeting_occasion=$((greeting_occasion+1))
+done
+
+ALIAS:
+alias greet3="./script.sh 3"
+
+Any command that can be run in the terminal can be run in a bash script.
+Variables are assigned using an equals sign with no space (greeting="hello").
+Variables are accessed using a dollar sign (echo $greeting).
+Conditionals use if, then, else, fi syntax.
+Three types of loops can be used: for, while, and until.
+Bash scripts use a unique set of comparison operators:
+Equal: -eq
+Not equal: -ne
+Less than or equal: -le
+Less than: -lt
+Greater than or equal: -ge
+Greater than: -gt
+Is null: -z
+Input arguments can be passed to a bash script after the script name, separated by spaces (myScript.sh “hello” “how are you”).
+Input can be requested from the script user with the read keyword.
+Aliases can be created in the .bashrc or .bash_profile using the alias keyword.
+
+#!/bin/bash
+echo "Welcome!"
+#to read the first line generally head reads 10lines from the given file
+firstline=$(head -n 1 source/changelog.md)
+#reading the file and converting the string 'firstline' to array 'splitfirstline'
+read -a splitfirstline <<< $firstline
+#storing the value at index 1 to the variable 'version'
+version=${splitfirstline[1]}
+echo "You are building version" $version
+echo " enter “1” (for yes) to continue and “0” (for no) to exit"
+read versioncontinue 
+if [ $versioncontinue -eq 1 ]
+  then 
+    echo "OK"
+    for filename in source/*
+    do
+      if [ "$filename" == "source/secretinfo.md" ]
+        then
+        #below command is used to replace 44 with XX where sed is to find and replace,i is to update file,s is for substitute,g is to globally replace 44 with XX and I is used to avoid case sensitive
+          sed -i 's/42/XX/g' $filename
+          #copying file to build
+          cp $filename build
+      else
+        echo "Copying" $filename
+        cp $filename build
+      fi
+    done 
+else
+  echo "Please come back when you are ready"
+fi
+cd build/
+echo "Build version $version contains:"
+ls
+
